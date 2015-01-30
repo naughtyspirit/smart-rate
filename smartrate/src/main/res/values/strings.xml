@@ -1,0 +1,9 @@
+<resources>
+    <string name="smartrate_yes">Yes</string>
+    <string name="smartrate_no">No</string>
+    <string name="smartrate_rate_dialog_message">Would you like to rate %s\non Google Play?</string>
+    <string name="smartrate_do_you_love">Do you love %s?</string>
+    <string name="smartrate_feedback_input_hint">Tell us what you think</string>
+    <string name="smartrate_send">Send</string>
+    <string name="smartrate_rate_dialog_title">Rate %s</string>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/smartrate_dialog_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/smartrate_love_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/smartrate_dialog_title_margin_top"
+        android:text="@string/smartrate_do_you_love"
+        android:textAppearance="@android:style/TextAppearance.DialogWindowTitle" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/smartrate_love_no_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:text="@string/smartrate_no" />
+
+        <Button
+            android:id="@+id/smartrate_love_yes_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="@string/smartrate_yes" />
+    </LinearLayout>
+</LinearLayout>

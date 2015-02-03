@@ -3,8 +3,11 @@ package co.naughtyspirit.smartrate;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.view.View;
+
+import com.squareup.otto.Subscribe;
 
 import co.naughtyspirit.smartrate.dialog.FeedbackDialog;
 import co.naughtyspirit.smartrate.dialog.LoveDialog;
@@ -12,6 +15,8 @@ import co.naughtyspirit.smartrate.dialog.RateDialog;
 import co.naughtyspirit.smartrate.dialog.listener.OnNoClickListener;
 import co.naughtyspirit.smartrate.dialog.listener.OnSendClickListener;
 import co.naughtyspirit.smartrate.dialog.listener.OnYesClickListener;
+import it.appspice.android.AppSpice;
+import it.appspice.android.api.models.VariableProperties;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
@@ -19,21 +24,56 @@ import co.naughtyspirit.smartrate.dialog.listener.OnYesClickListener;
  */
 public class SmartRate {
 
+    public static final String SMART_RATE_PREFERENCES = "smart_rate_preferences";
+    public static final String SMART_RATE_APP_RUNS_KEY = "smart_rate_app_runs";
+    private static SmartRate instance;
+    private final SharedPreferences preferences;
     private Context context;
-    private static String appName;
+    private String appName;
+    private int showRun;
+    private String showLocation;
+    private long appRun;
 
-    public SmartRate(Context context) {
+    public SmartRate(Context context, String appSpiceId, String appId) {
         this.context = context;
+        this.appName = getApplicationName(context);
+        AppSpice.init(context, appSpiceId, appId);
+        preferences = context.getSharedPreferences(SMART_RATE_PREFERENCES, Context.MODE_PRIVATE);
+        incrementAppRuns();
+        AppSpice.getVariable("smartRateShowTime");
     }
 
-    public static void show(Context context, String appName) {
-        SmartRate.appName = appName;
-        new SmartRate(context).createDialog();
+    @Subscribe
+    public void onShowTimeReceived(VariableProperties variableProperties) {
+        showRun = variableProperties.getInt("showRun");
+        showLocation = variableProperties.get("showLocation");
     }
 
-    private void createDialog() {
-        LoveDialog loveDialog = new LoveDialog(context, appName, onLoveYesClickListener, onLoveNoClickListener);
-        loveDialog.show();
+    private void incrementAppRuns() {
+        appRun = preferences.getLong(SMART_RATE_APP_RUNS_KEY, 0);
+        appRun++;
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(SMART_RATE_APP_RUNS_KEY, appRun);
+        editor.apply();
+    }
+
+    public static void init(Context context, String appSpiceId, String appId) {
+        instance = new SmartRate(context, appSpiceId, appId);
+    }
+
+    private static String getApplicationName(Context context) {
+        return context.getApplicationInfo().loadLabel(context.getPackageManager()).toString();
+    }
+
+    public static void show(String showLocation) {
+        instance.showDialog(showLocation);
+    }
+
+    private void showDialog(String showLocation) {
+        if (appRun == showRun && this.showLocation.equals(showLocation)) {
+            LoveDialog loveDialog = new LoveDialog(context, appName, onLoveYesClickListener, onLoveNoClickListener);
+            loveDialog.show();
+        }
     }
 
     private OnYesClickListener onLoveYesClickListener = new OnYesClickListener() {

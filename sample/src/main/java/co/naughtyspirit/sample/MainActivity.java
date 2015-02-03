@@ -7,15 +7,13 @@ import android.view.MenuItem;
 
 import co.naughtyspirit.smartrate.SmartRate;
 
-
 public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SmartRate.show(this, "AppHunt");
-
+        SmartRate.init(this, "", "");
+        SmartRate.show();
     }
 }

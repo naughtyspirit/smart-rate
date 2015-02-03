@@ -24,8 +24,6 @@ import it.appspice.android.api.models.VariableProperties;
  */
 public class SmartRate {
 
-    public static final String SMART_RATE_PREFERENCES = "smart_rate_preferences";
-    public static final String SMART_RATE_APP_RUNS_KEY = "smart_rate_app_runs";
     private static SmartRate instance;
     private final SharedPreferences preferences;
     private Context context;
@@ -38,7 +36,7 @@ public class SmartRate {
         this.context = context;
         this.appName = getApplicationName(context);
         AppSpice.init(context, appSpiceId, appId);
-        preferences = context.getSharedPreferences(SMART_RATE_PREFERENCES, Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences(Constants.SMART_RATE_PREFERENCES, Context.MODE_PRIVATE);
         incrementAppRuns();
         AppSpice.getVariable("smartRateShowTime");
     }
@@ -50,10 +48,10 @@ public class SmartRate {
     }
 
     private void incrementAppRuns() {
-        appRun = preferences.getLong(SMART_RATE_APP_RUNS_KEY, 0);
+        appRun = preferences.getLong(Constants.SMART_RATE_APP_RUNS_KEY, 0);
         appRun++;
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putLong(SMART_RATE_APP_RUNS_KEY, appRun);
+        editor.putLong(Constants.SMART_RATE_APP_RUNS_KEY, appRun);
         editor.apply();
     }
 
@@ -79,6 +77,7 @@ public class SmartRate {
     private OnYesClickListener onLoveYesClickListener = new OnYesClickListener() {
         @Override
         public void onYesClick(Dialog dialog, View view) {
+            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "love.yes.click");
             dialog.dismiss();
             RateDialog rateDialog = new RateDialog(context, appName, onRateYesClickListener, onRateNoClickListener);
             rateDialog.show();
@@ -88,6 +87,7 @@ public class SmartRate {
     private OnNoClickListener onLoveNoClickListener = new OnNoClickListener() {
         @Override
         public void onNoClick(Dialog dialog, View view) {
+            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "love.no.click");
             dialog.dismiss();
             FeedbackDialog feedbackDialog = new FeedbackDialog(context, onSendClickListener);
             feedbackDialog.show();
@@ -97,6 +97,7 @@ public class SmartRate {
     private OnYesClickListener onRateYesClickListener = new OnYesClickListener() {
         @Override
         public void onYesClick(Dialog dialog, View view) {
+            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "rate.yes.click");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
@@ -106,6 +107,7 @@ public class SmartRate {
     private OnNoClickListener onRateNoClickListener = new OnNoClickListener() {
         @Override
         public void onNoClick(Dialog dialog, View view) {
+            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "rate.no.click");
             dialog.dismiss();
         }
     };
@@ -113,6 +115,7 @@ public class SmartRate {
     private OnSendClickListener onSendClickListener = new OnSendClickListener() {
         @Override
         public void onSendClick(Dialog dialog, String feedbackMessage) {
+            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "feedback.send.click");
             dialog.dismiss();
             // send feedback
         }

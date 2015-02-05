@@ -1,1 +1,1 @@
-include ':smartrate', ':sample', ':appspice'
+include ':smartrate', ':sample'

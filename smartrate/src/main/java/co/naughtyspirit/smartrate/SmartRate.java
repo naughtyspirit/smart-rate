@@ -7,16 +7,12 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.view.View;
 
-import com.squareup.otto.Subscribe;
-
 import co.naughtyspirit.smartrate.dialog.FeedbackDialog;
 import co.naughtyspirit.smartrate.dialog.LoveDialog;
 import co.naughtyspirit.smartrate.dialog.RateDialog;
 import co.naughtyspirit.smartrate.dialog.listener.OnNoClickListener;
 import co.naughtyspirit.smartrate.dialog.listener.OnSendClickListener;
 import co.naughtyspirit.smartrate.dialog.listener.OnYesClickListener;
-import it.appspice.android.AppSpice;
-import it.appspice.android.api.models.VariableProperties;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
@@ -35,17 +31,17 @@ public class SmartRate {
     public SmartRate(Context context, String appSpiceId, String appId) {
         this.context = context;
         this.appName = getApplicationName(context);
-        AppSpice.init(context, appSpiceId, appId);
+//        AppSpice.init(context, appSpiceId, appId);
         preferences = context.getSharedPreferences(Constants.SMART_RATE_PREFERENCES, Context.MODE_PRIVATE);
         incrementAppRuns();
-        AppSpice.getVariable("smartRateShowTime");
+//        AppSpice.getVariable("smartRateShowTime");
     }
-
-    @Subscribe
-    public void onShowTimeReceived(VariableProperties variableProperties) {
-        showRun = variableProperties.getInt("showRun");
-        showLocation = variableProperties.get("showLocation");
-    }
+//
+//    @Subscribe
+//    public void onShowTimeReceived(VariableProperties variableProperties) {
+//        showRun = variableProperties.getInt("showRun");
+//        showLocation = variableProperties.get("showLocation");
+//    }
 
     private void incrementAppRuns() {
         appRun = preferences.getLong(Constants.SMART_RATE_APP_RUNS_KEY, 0);
@@ -77,7 +73,7 @@ public class SmartRate {
     private OnYesClickListener onLoveYesClickListener = new OnYesClickListener() {
         @Override
         public void onYesClick(Dialog dialog, View view) {
-            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "love.yes.click");
+//            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "love.yes.click");
             dialog.dismiss();
             RateDialog rateDialog = new RateDialog(context, appName, onRateYesClickListener, onRateNoClickListener);
             rateDialog.show();
@@ -87,7 +83,7 @@ public class SmartRate {
     private OnNoClickListener onLoveNoClickListener = new OnNoClickListener() {
         @Override
         public void onNoClick(Dialog dialog, View view) {
-            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "love.no.click");
+//            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "love.no.click");
             dialog.dismiss();
             FeedbackDialog feedbackDialog = new FeedbackDialog(context, onSendClickListener);
             feedbackDialog.show();
@@ -97,7 +93,7 @@ public class SmartRate {
     private OnYesClickListener onRateYesClickListener = new OnYesClickListener() {
         @Override
         public void onYesClick(Dialog dialog, View view) {
-            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "rate.yes.click");
+//            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "rate.yes.click");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
@@ -107,7 +103,7 @@ public class SmartRate {
     private OnNoClickListener onRateNoClickListener = new OnNoClickListener() {
         @Override
         public void onNoClick(Dialog dialog, View view) {
-            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "rate.no.click");
+//            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "rate.no.click");
             dialog.dismiss();
         }
     };
@@ -115,7 +111,7 @@ public class SmartRate {
     private OnSendClickListener onSendClickListener = new OnSendClickListener() {
         @Override
         public void onSendClick(Dialog dialog, String feedbackMessage) {
-            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "feedback.send.click");
+//            AppSpice.track(Constants.APP_SPICE_NAMESPACE, "feedback.send.click");
             dialog.dismiss();
             // send feedback
         }

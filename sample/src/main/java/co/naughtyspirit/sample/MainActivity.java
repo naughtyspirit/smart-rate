@@ -14,6 +14,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SmartRate.init(this, "", "");
-        SmartRate.show();
+        SmartRate.show("MainActivity#onCreate");
     }
 }
